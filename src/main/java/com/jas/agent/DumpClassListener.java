@@ -1,3 +1,8 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.jas.agent;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -5,46 +10,38 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.utility.JavaModule;
 
-import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * @author ReaJason
- * @since 2024/2/3
- */
 public class DumpClassListener implements AgentBuilder.Listener {
-    @Override
-    public void onDiscovery(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {
-
+    public DumpClassListener() {
     }
 
-    @Override
+    public void onDiscovery(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {
+    }
+
     public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, boolean loaded, DynamicType dynamicType) {
         try {
             Path path = Paths.get("weaving", "classes");
-            if (Files.notExists(path)) {
+            if (Files.notExists(path, new LinkOption[0])) {
                 Files.createDirectories(path);
             }
+
+            System.out.println("dumpFolder is " + path.toFile().getAbsolutePath());
             dynamicType.saveIn(path.toFile());
-        } catch (Exception e) {
-            // ignore
+        } catch (Exception var7) {
         }
+
     }
 
-    @Override
     public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, boolean loaded) {
-
     }
 
-    @Override
     public void onError(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded, Throwable throwable) {
-
     }
 
-    @Override
     public void onComplete(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {
-
     }
 }
